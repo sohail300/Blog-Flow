@@ -21,7 +21,6 @@ interface UserDetailsProps {
 }
 
 const UserDetails = ({
-  id,
   name,
   email,
   photourl,

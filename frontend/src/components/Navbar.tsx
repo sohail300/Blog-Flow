@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const menuRef = useRef(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
   const [menuHeight, setMenuHeight] = useState(0);
   const navigate = useNavigate();
 
@@ -22,7 +22,7 @@ const Navbar = () => {
         setIsLoggedIn(true);
       }
     } catch (error) {
-      // console.log(error as AxiosError);
+      console.log(error as AxiosError);
     }
   }
 
@@ -33,7 +33,7 @@ const Navbar = () => {
   }
 
   useEffect(() => {
-    if (isMenuOpen) {
+    if (isMenuOpen && menuRef.current) {
       setMenuHeight(menuRef.current.scrollHeight);
     } else {
       setMenuHeight(0);

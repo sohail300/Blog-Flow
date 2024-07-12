@@ -9,6 +9,8 @@ import {
   Section,
   Text,
 } from "@react-email/components";
+
+// @ts-expect-error because React is need here.
 import React from "react";
 
 export const VerificationEmail = ({
