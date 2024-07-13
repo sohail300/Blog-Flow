@@ -40,10 +40,10 @@ const Home = () => {
   }
 
   return (
-    <div className="container mx-auto pt-24 px-4">
+    <div className="mx-auto pt-24 px-4">
       {blogs.map((blog: Blog) => {
         return (
-          <div className="container mx-auto py-4 px-4" key={blog.id}>
+          <div className="mx-auto py-4 px-4" key={blog.id}>
             <BlogCard
               id={blog.id}
               title={blog.title}

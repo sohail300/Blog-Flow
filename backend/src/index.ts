@@ -14,12 +14,7 @@ const app = new Hono<{
   Variables: {};
 }>();
 
-app.use(
-  cors({
-    credentials: true,
-    origin: FRONTEND_URL,
-  })
-);
+app.use(cors());
 
 app.get("/", (c) => {
   console.log("Healthy Server!");

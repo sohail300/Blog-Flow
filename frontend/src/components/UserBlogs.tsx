@@ -15,6 +15,7 @@ import { api } from "@/utils/config";
 import { AxiosError } from "axios";
 import { useToast } from "./ui/use-toast";
 import { Switch } from "@/components/ui/switch";
+import { useNavigate } from "react-router-dom";
 
 interface Details {
   blogs: Blog[] | undefined;
@@ -23,6 +24,7 @@ interface Details {
 
 const UserBlogs = ({ blogs, getDetails }: Details) => {
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   async function handleDeleteBlog(id: number) {
     try {
@@ -142,7 +144,10 @@ const UserBlogs = ({ blogs, getDetails }: Details) => {
                   />
                 </td>
                 <td className="px-6 py-4">
-                  <button className="text-blue-600 hover:text-blue-900 mr-4">
+                  <button
+                    className="text-blue-600 hover:text-blue-900 mr-4"
+                    onClick={() => navigate(`/blog/edit/${blog.id}`)}
+                  >
                     Edit
                   </button>
 

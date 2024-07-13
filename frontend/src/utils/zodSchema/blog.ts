@@ -4,7 +4,7 @@ export const blogSchema = z.object({
   title: z
     .string()
     .min(1, "The title should be between 1 and 50 characters")
-    .max(50, "The title should be between 1 and 50 characters"),
+    .max(100, "The title should be between 1 and 50 characters"),
   content: z
     .string()
     .min(50, "The title should be between 50 and 5000 characters")

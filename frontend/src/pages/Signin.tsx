@@ -39,12 +39,6 @@ const Signin = () => {
       if (response) {
         localStorage.setItem("token", response.data.token);
         navigate("/");
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Error Signing in!",
-          description: "Please try again.",
-        });
       }
     } catch (error) {
       console.log(error as AxiosError);

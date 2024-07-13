@@ -7,6 +7,9 @@ import Signin from "./pages/Signin";
 import ChangePassword from "./pages/ChangePassword";
 import Verify from "./pages/Verify";
 import EnterEmail from "./pages/EnterEmail";
+import PostBlog from "./pages/PostBlog";
+import EditBlog from "./pages/EditBlog";
+import GetBlog from "./pages/GetBlog";
 
 function App() {
   return (
@@ -19,6 +22,9 @@ function App() {
         <Route element={<Verify />} path="/verify" />
         <Route element={<EnterEmail />} path="/changepassword" />
         <Route element={<ChangePassword />} path="/changePassword/:token" />
+        <Route element={<PostBlog />} path="/blog/post" />
+        <Route element={<EditBlog />} path="/blog/edit/:id" />
+        <Route element={<GetBlog />} path="/blog/view/:id" />
       </Routes>
     </>
   );
