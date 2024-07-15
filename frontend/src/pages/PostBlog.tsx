@@ -6,6 +6,7 @@ import { api } from "@/utils/config";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 import Loader from "@/components/Loader";
+import { ApiErrorResponse } from "@/utils/interfaces";
 
 const PostBlog = () => {
   const editorRef = useRef(null);
@@ -13,13 +14,14 @@ const PostBlog = () => {
   const [isPublishing, setIsPublishing] = useState(false);
   const [titleError, setTitleError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [newPhoto, setNewPhoto] = useState<File | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
 
   async function isLoggedIn() {
     try {
       setIsLoading(true);
-      const response = await api.get("/me", {
+      await api.get("/me", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -36,7 +38,7 @@ const PostBlog = () => {
     isLoggedIn();
   }, []);
 
-  const handleTitleChange = (e) => {
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
     setTitle(newTitle);
 
@@ -67,19 +69,20 @@ const PostBlog = () => {
     if (editorRef.current) {
       try {
         setIsPublishing(true);
+        //@ts-expect-error getInstance is valid.
         const editorInstance = editorRef.current.getInstance();
         const content = editorInstance.getMarkdown();
 
-        // Simulate API call
-        const response = await api.post(
-          "/api/blog/post",
-          { title, content },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
+        const formData = new FormData();
+        formData.append("photo", newPhoto as File);
+        formData.append("title", title);
+        formData.append("content", content);
+        const response = await api.post("/api/blog/post", formData, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "multipart/form-data",
+          },
+        });
 
         if (response) {
           toast({
@@ -90,13 +93,14 @@ const PostBlog = () => {
               color: "#388e3c",
             },
           });
-          navigate("/");
+          navigate(`/blog/view/${response.data.id}`);
         }
       } catch (error) {
-        console.log(error as AxiosError);
+        const axiosError = error as AxiosError;
+        console.log(axiosError);
         toast({
           variant: "destructive",
-          title: "Error publishing blog!",
+          title: (axiosError.response?.data as ApiErrorResponse).error?.message,
           description: "Please try again.",
         });
       } finally {
@@ -126,6 +130,21 @@ const PostBlog = () => {
             }`}
             maxLength={100}
           />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) =>
+              setNewPhoto(e.target.files ? e.target.files[0] : null)
+            }
+            className="hidden"
+            id="photo-upload"
+          />
+          <label
+            htmlFor="photo-upload"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer mr-2"
+          >
+            Choose Photo
+          </label>
           <button
             onClick={handlePublish}
             disabled={isPublishDisabled}

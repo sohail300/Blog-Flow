@@ -10,7 +10,7 @@ import {
 } from "../zodSchema/user";
 import bcryptjs, { hash } from "bcryptjs";
 import { sendForgotPasswordMail } from "../utils/sendForgotPasswordMail";
-import user from "../routes/user";
+import { imageSchema } from "../zodSchema/blog";
 
 export async function getUserBlogs(c: Context) {
   try {
@@ -148,8 +148,54 @@ export async function updateUser(c: Context) {
   }
 }
 
+function arrayBufferToBase64(buffer: ArrayBuffer): string {
+  let binary = "";
+  const bytes = new Uint8Array(buffer);
+  const len = bytes.byteLength;
+  for (let i = 0; i < len; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
+}
+
 export async function updatePhoto(c: Context) {
   try {
+    const id = c.get("id");
+    const parsedInput = imageSchema.safeParse(await c.req.parseBody());
+
+    if (parsedInput.success === false) {
+      console.log("Invalid Input");
+      return c.json(
+        { error: parsedInput.error.issues[0] },
+        StatusCode.invalidInput
+      );
+    }
+
+    const { photo } = parsedInput.data;
+    console.log(photo);
+
+    if (!photo) {
+      return c.json({ msg: "Please provide photo" });
+    }
+
+    const fileArrayBuffer = await photo.arrayBuffer();
+
+    // Convert ArrayBuffer to Base64
+    const base64 = arrayBufferToBase64(fileArrayBuffer);
+
+    const photourl = `data:${photo.type};base64,${base64}`;
+
+    // Update user in database
+    const prisma = new PrismaClient({
+      datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());
+
+    await prisma.user.update({
+      where: { id },
+      data: { photourl },
+    });
+
+    return c.json({ msg: "Profile photo updated" }, 201);
   } catch (error) {
     console.log("Error occured:", error);
     return c.json({ error }, StatusCode.serverError);

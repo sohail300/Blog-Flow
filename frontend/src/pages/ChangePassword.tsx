@@ -33,10 +33,7 @@ const ChangePassword = () => {
 
   async function onSubmit(values: passwordType) {
     try {
-      console.log("running");
-      console.log(token);
       setSubmiting(true);
-      console.log(values);
 
       const response = await api.post(
         "/api/user/forgotPassword/change",

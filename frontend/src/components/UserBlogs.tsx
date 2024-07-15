@@ -33,7 +33,6 @@ const UserBlogs = ({ blogs, getDetails }: Details) => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      console.log(response);
       if (response) {
         toast({
           title: "Blog deleted!",
@@ -57,7 +56,6 @@ const UserBlogs = ({ blogs, getDetails }: Details) => {
 
   async function handlePublish(id: number, checked: boolean) {
     try {
-      console.log(id);
       const response = await api.put(
         `/api/blog/publish/${id}`,
         { publish: checked },
@@ -67,7 +65,6 @@ const UserBlogs = ({ blogs, getDetails }: Details) => {
           },
         }
       );
-      console.log(response);
       if (response) {
         toast({
           title: "Changing visibility!",

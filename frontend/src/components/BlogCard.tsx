@@ -1,7 +1,7 @@
 import { formatDate } from "@/utils/date";
 import { Blog } from "@/utils/interfaces";
 import Markdown from "markdown-to-jsx";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const BlogCard = ({
   id,
@@ -13,63 +13,56 @@ const BlogCard = ({
   authorPhoto,
 }: Blog) => {
   const date = formatDate(new Date(createdOn));
+  const navigate = useNavigate();
 
   let truncatedContent;
   if (content) {
     truncatedContent =
-      content.slice(0, 400) + (content.length > 400 ? "..." : "");
+      typeof content === "string"
+        ? content.slice(0, 300) + (content.length > 300 ? "..." : "")
+        : "";
   }
 
-  console.log(id);
   return (
-    <Link to={`/blog/view/${id}`}>
-      <div className="w-full md:w-3/4 mx-auto bg-white shadow-lg rounded-lg overflow-hidden cursor-pointer">
-        <div className="flex flex-col md:flex-row">
-          <div className="md:w-2/3 p-4 md:p-5">
-            <div className="flex items-center mb-3">
-              {authorPhoto === null ? (
-                <img
-                  className="w-10 h-10 rounded-full mr-3"
-                  src="https://st2.depositphotos.com/4111759/12123/v/950/depositphotos_121233262-stock-illustration-male-default-placeholder-avatar-profile.jpg"
-                  alt={authorName}
-                />
-              ) : (
-                <img
-                  className="w-10 h-10 rounded-full mr-3"
-                  src={authorPhoto}
-                  alt={authorName}
-                />
-              )}
-              <div className="text-sm">
-                <p className="text-gray-900 font-semibold leading-none">
-                  {authorName}
-                </p>
-                <p className="text-gray-600 text-xs mt-1">{date}</p>
-              </div>
+    <div className="w-full md:w-3/4 mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+      <div
+        className="flex flex-col md:flex-row cursor-pointer"
+        onClick={() => navigate(`/blog/view/${id}`)}
+      >
+        <div className="md:w-2/3 p-4 md:p-5">
+          <div className="flex items-center mb-3">
+            <img
+              className="w-10 h-10 rounded-full mr-3 object-cover"
+              src={
+                authorPhoto ||
+                "https://res.cloudinary.com/dwuzfbivo/image/upload/v1720976389/blogflow/person_placeholder_dl8svn.jpg"
+              }
+              alt={authorName}
+            />
+            <div className="text-sm">
+              <p className="text-gray-900 font-semibold leading-none">
+                {authorName}
+              </p>
+              <p className="text-gray-600 text-xs mt-1">{date}</p>
             </div>
-            <h2 className="text-xl font-bold text-gray-800 mb-2">{title}</h2>
-            <Markdown className="text-gray-700 mb-3 text-sm">
-              {truncatedContent}
-            </Markdown>
           </div>
-          <div className="md:w-1/3">
-            {photourl === null ? (
-              <img
-                className="w-full h-40 md:h-full object-cover object-center"
-                src="placeholder1.jpg"
-                alt={title}
-              />
-            ) : (
-              <img
-                className="w-full h-40 md:h-full object-cover object-center"
-                src={photourl}
-                alt={title}
-              />
-            )}
-          </div>
+          <h2 className="text-xl font-bold text-gray-800 mb-2">{title}</h2>
+          <Markdown className="text-gray-700 mb-3 text-sm">
+            {typeof truncatedContent === "string" ? truncatedContent : ""}
+          </Markdown>
+        </div>
+        <div className="md:w-1/3">
+          <img
+            className="w-full h-40 md:h-full object-cover object-center"
+            src={
+              photourl ||
+              "https://res.cloudinary.com/dwuzfbivo/image/upload/v1720976345/blogflow/placeholder1_vdiazo.jpg"
+            }
+            alt={title}
+          />
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 

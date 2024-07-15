@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { AxiosError } from "axios";
+import { ApiErrorResponse } from "@/utils/interfaces";
 
 const Signup = () => {
   const [isSubmiting, setSubmiting] = useState(false);
@@ -57,10 +58,11 @@ const Signup = () => {
         });
       }
     } catch (error) {
-      console.log(error as AxiosError);
+      const axiosError = error as AxiosError;
+      console.log(axiosError);
       toast({
         variant: "destructive",
-        title: "Error Signing up!",
+        title: (axiosError.response?.data as ApiErrorResponse).error?.message,
         description: "Please try again.",
       });
     } finally {

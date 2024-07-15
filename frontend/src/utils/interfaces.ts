@@ -21,3 +21,9 @@ export interface User {
   isVerified: boolean | undefined;
   blogs: Blog[] | undefined;
 }
+
+export interface ApiErrorResponse {
+  error?: {
+    message?: string;
+  };
+}

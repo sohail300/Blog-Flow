@@ -30,6 +30,8 @@ const UserDetails = ({
   const [newName, setNewName] = useState(name);
   const [isSending, setIsSending] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isPhotoUpdating, setIsPhotoUpdating] = useState(false);
+  const [newPhoto, setNewPhoto] = useState<File | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -77,7 +79,6 @@ const UserDetails = ({
           },
         }
       );
-      console.log(response);
       if (response) {
         toast({
           title: "Name changed!",
@@ -98,6 +99,44 @@ const UserDetails = ({
       });
     } finally {
       setIsUpdating(false);
+    }
+  }
+
+  async function handlePhotoUpdate() {
+    if (!newPhoto) return;
+
+    try {
+      setIsPhotoUpdating(true);
+      const formData = new FormData();
+      formData.append("photo", newPhoto);
+
+      const response = await api.put(`/api/user/updatePhoto`, formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response) {
+        toast({
+          title: "Photo updated!",
+          style: {
+            backgroundColor: "#dff0e0",
+            borderColor: "#7f9f7f",
+            color: "#388e3c",
+          },
+        });
+        getDetails();
+      }
+    } catch (error) {
+      console.log(error as AxiosError);
+      toast({
+        variant: "destructive",
+        title: "Error updating photo!",
+        description: "Please try again.",
+      });
+    } finally {
+      setIsPhotoUpdating(false);
     }
   }
 
@@ -133,19 +172,40 @@ const UserDetails = ({
   return (
     <div className="bg-white shadow-md rounded-lg p-6">
       <div className="mb-6">
-        {photourl === null ? (
-          <img
-            src="https://st2.depositphotos.com/4111759/12123/v/950/depositphotos_121233262-stock-illustration-male-default-placeholder-avatar-profile.jpg"
-            alt="User"
-            className="w-32 h-32 rounded-full mx-auto mb-4"
+        <img
+          src={
+            photourl ||
+            "https://res.cloudinary.com/dwuzfbivo/image/upload/v1720976389/blogflow/person_placeholder_dl8svn.jpg"
+          }
+          alt="User"
+          className="w-32 h-32 rounded-full mx-auto mb-4 object-cover"
+        />
+        <div className="flex items-center justify-center">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) =>
+              setNewPhoto(e.target.files ? e.target.files[0] : null)
+            }
+            className="hidden"
+            id="photo-upload"
           />
-        ) : (
-          <img
-            src={photourl}
-            alt="User"
-            className="w-32 h-32 rounded-full mx-auto mb-4"
-          />
-        )}
+          <label
+            htmlFor="photo-upload"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer mr-2"
+          >
+            Choose Photo
+          </label>
+          <button
+            onClick={handlePhotoUpdate}
+            disabled={!newPhoto || isPhotoUpdating}
+            className={`bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ${
+              !newPhoto || isUpdating ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+          >
+            {isPhotoUpdating ? "Updating..." : "Update Photo"}
+          </button>
+        </div>
       </div>
 
       <div className="mb-4">

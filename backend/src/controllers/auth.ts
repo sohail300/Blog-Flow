@@ -5,9 +5,7 @@ import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import bcryptjs from "bcryptjs";
 import { sign } from "hono/jwt";
-import { setCookie } from "hono/cookie";
 import { sendMail } from "../utils/sendVerificationMail";
-import { FRONTEND_URL } from "../utils/config";
 
 export async function signin(c: Context) {
   try {

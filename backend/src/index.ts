@@ -3,7 +3,6 @@ import authRouter from "./routes/auth";
 import blogRouter from "./routes/blog";
 import userRouter from "./routes/user";
 import { cors } from "hono/cors";
-import { FRONTEND_URL } from "./utils/config";
 import { auth } from "./middleware/authorisation";
 
 const app = new Hono<{
@@ -16,9 +15,19 @@ const app = new Hono<{
 
 app.use(cors());
 
-app.get("/", (c) => {
+app.get("/", (c: Context) => {
   console.log("Healthy Server!");
   return c.text("Healthy Server!");
+});
+
+app.post("/test", async (c: Context) => {
+  try {
+    const body = await c.req.parseBody();
+    console.log(body);
+    return c.text("body");
+  } catch (error) {
+    console.log("[ERROR]", error);
+  }
 });
 
 app.get("/me", auth, (c: Context) => {
@@ -32,7 +41,7 @@ app.route("/api/auth", authRouter);
 app.route("/api/blog", blogRouter);
 app.route("/api/user", userRouter);
 
-app.notFound((c) => {
+app.notFound((c: Context) => {
   return c.text("Invalid Route", 404);
 });
 
