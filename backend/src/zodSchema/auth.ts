@@ -8,8 +8,8 @@ export const signupSchema = z.object({
   email: z
     .string()
     .email()
-    .max(30, "Email should be between 1 to 30 characters")
-    .min(1, "Email should be between 1 to 30 characters"),
+    .max(100, "Email should be between 1 to 100 characters")
+    .min(1, "Email should be between 1 to 100 characters"),
   password: z
     .string()
     .max(20, "Password should be between 6 to 20 characters")

@@ -15,6 +15,8 @@ const Home = () => {
     try {
       const response = await api.get("/api/blog/all");
 
+      console.log(response);
+
       if (response) {
         setBlogs(response.data.blogs);
       }
@@ -47,7 +49,6 @@ const Home = () => {
             <BlogCard
               id={blog.id}
               title={blog.title}
-              content={blog.content}
               createdOn={blog.createdOn}
               photourl={blog.photourl}
               authorName={blog.author?.name}

@@ -16,7 +16,6 @@ export async function getAllBlogs(c: Context) {
       select: {
         id: true,
         title: true,
-        content: true,
         createdOn: true,
         photourl: true,
         author: {

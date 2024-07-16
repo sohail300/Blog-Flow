@@ -1,12 +1,10 @@
 import { formatDate } from "@/utils/date";
 import { Blog } from "@/utils/interfaces";
-import Markdown from "markdown-to-jsx";
 import { useNavigate } from "react-router-dom";
 
 const BlogCard = ({
   id,
   title,
-  content,
   createdOn,
   photourl,
   authorName,
@@ -14,14 +12,6 @@ const BlogCard = ({
 }: Blog) => {
   const date = formatDate(new Date(createdOn));
   const navigate = useNavigate();
-
-  let truncatedContent;
-  if (content) {
-    truncatedContent =
-      typeof content === "string"
-        ? content.slice(0, 300) + (content.length > 300 ? "..." : "")
-        : "";
-  }
 
   return (
     <div className="w-full md:w-3/4 mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
@@ -47,9 +37,6 @@ const BlogCard = ({
             </div>
           </div>
           <h2 className="text-xl font-bold text-gray-800 mb-2">{title}</h2>
-          <Markdown className="text-gray-700 mb-3 text-sm">
-            {typeof truncatedContent === "string" ? truncatedContent : ""}
-          </Markdown>
         </div>
         <div className="md:w-1/3">
           <img

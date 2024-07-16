@@ -12,36 +12,6 @@ import bcryptjs, { hash } from "bcryptjs";
 import { sendForgotPasswordMail } from "../utils/sendForgotPasswordMail";
 import { imageSchema } from "../zodSchema/blog";
 
-export async function getUserBlogs(c: Context) {
-  try {
-    const id = c.get("id");
-
-    const prisma = new PrismaClient({
-      datasourceUrl: c.env.DATABASE_URL,
-    }).$extends(withAccelerate());
-
-    const blogs = await prisma.blog.findMany({
-      where: {
-        authorId: id,
-      },
-      select: {
-        id: true,
-        title: true,
-        content: true,
-        published: true,
-        createdOn: true,
-        photourl: true,
-      },
-    });
-
-    console.log("All Blogs:", blogs);
-
-    return c.json({ blogs }, StatusCode.ok);
-  } catch (error) {
-    console.log("Error occured:", error);
-    return c.json({ error }, StatusCode.serverError);
-  }
-}
 export async function deletUser(c: Context) {
   try {
     const id = c.get("id");
@@ -56,7 +26,7 @@ export async function deletUser(c: Context) {
       },
     });
 
-    console.log("User deleted:", user);
+    console.log("User deleted");
     return c.json({ msg: "User deleted" }, StatusCode.dataWritten);
   } catch (error) {
     console.log("Error occured:", error);
@@ -98,7 +68,7 @@ export async function getUserDetails(c: Context) {
       },
     });
 
-    console.log("User:", user);
+    console.log("User Details");
 
     return c.json({ user }, StatusCode.ok);
   } catch (error) {
@@ -140,7 +110,7 @@ export async function updateUser(c: Context) {
       },
     });
 
-    console.log("User:", user);
+    console.log("User Updated");
     return c.json({ msg: "User updated" }, StatusCode.dataWritten);
   } catch (error) {
     console.log("Error occured:", error);
@@ -195,6 +165,7 @@ export async function updatePhoto(c: Context) {
       data: { photourl },
     });
 
+    console.log("Profile photo updated");
     return c.json({ msg: "Profile photo updated" }, 201);
   } catch (error) {
     console.log("Error occured:", error);
@@ -219,7 +190,7 @@ export async function userIsVerified(c: Context) {
       },
     });
 
-    console.log("User:", user);
+    console.log("User Verified or not");
     return c.json({ user }, StatusCode.ok);
   } catch (error) {
     console.log("Error occured:", error);

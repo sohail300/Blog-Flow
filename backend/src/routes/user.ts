@@ -3,7 +3,6 @@ import {
   changePassword,
   deletUser,
   forgotPasswordSendMail,
-  getUserBlogs,
   getUserDetails,
   updatePhoto,
   updateUser,
@@ -19,7 +18,6 @@ const user = new Hono<{
   Variables: {};
 }>();
 
-user.get("/blogs", auth, getUserBlogs);
 user.delete("/delete", auth, deletUser);
 user.get("/details", auth, getUserDetails);
 user.post("/update", auth, updateUser);
