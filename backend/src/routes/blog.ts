@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import {
   deleteBlog,
   getAllBlogs,
+  getPageLength,
   getSingleBlog,
   postBlog,
   updateBlog,
@@ -18,6 +19,7 @@ const blog = new Hono<{
 }>();
 
 blog.get("/all", getAllBlogs);
+blog.get("/length", getPageLength);
 blog.get("/:id", getSingleBlog);
 blog.put("/:id", auth, updateBlog);
 blog.put("/publish/:id", auth, updatePublished);

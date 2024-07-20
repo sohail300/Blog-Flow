@@ -6,12 +6,19 @@ import { blogSchema, imageSchema, publishSchema } from "../zodSchema/blog";
 
 export async function getAllBlogs(c: Context) {
   try {
+    const page = Number(c.req.query("page"));
+
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
     const blogs = await prisma.blog.findMany({
       where: {
         published: true,
+      },
+      take: 5,
+      skip: (page - 1) * 5,
+      orderBy: {
+        id: "asc",
       },
       select: {
         id: true,
@@ -36,6 +43,31 @@ export async function getAllBlogs(c: Context) {
     return c.json({ error }, StatusCode.serverError);
   }
 }
+
+export async function getPageLength(c: Context) {
+  try {
+    const prisma = new PrismaClient({
+      datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());
+    const blogs = await prisma.blog.findMany({
+      where: {
+        published: true,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    const TotalPages = Math.ceil(blogs.length / 5);
+    console.log("Page Length");
+
+    return c.json({ TotalPages }, StatusCode.ok);
+  } catch (error) {
+    console.log("Error occured:", error);
+    return c.json({ error }, StatusCode.serverError);
+  }
+}
+
 export async function getSingleBlog(c: Context) {
   try {
     const id = Number(c.req.param("id"));

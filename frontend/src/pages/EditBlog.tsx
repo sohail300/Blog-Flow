@@ -100,7 +100,6 @@ const EditBlog = () => {
         //@ts-expect-error getInstance is valid.
         const editorInstance = editorRef.current.getInstance();
         const content = editorInstance.getMarkdown();
-        console.log(newPhoto);
 
         const formData = new FormData();
         formData.append("photo", newPhoto as File);
