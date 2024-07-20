@@ -86,7 +86,7 @@ const Home = () => {
           </PaginationItem>
           {Array(totalPages)
             .fill(0)
-            .map((item, index) => {
+            .map((_item, index) => {
               return (
                 <PaginationItem
                   key={index}
