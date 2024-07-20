@@ -57,8 +57,6 @@ const Home = () => {
         title: "Error fetching blogs!",
         description: "Please try again.",
       });
-    } finally {
-      setIsLoading(false);
     }
   }
 
