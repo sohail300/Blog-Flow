@@ -166,6 +166,15 @@ const Signup = () => {
                 Reset it here
               </Link>
             </p>
+
+            <div>
+              <p
+                className="text-center text-sm text-blue-600"
+                onClick={() => {}}
+              >
+                Go to signin page for trail
+              </p>
+            </div>
           </form>
         </Form>
       </div>

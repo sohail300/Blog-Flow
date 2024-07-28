@@ -3,6 +3,7 @@ import { withAccelerate } from "@prisma/extension-accelerate";
 import { Context } from "hono";
 import { StatusCode } from "../types/statusCode";
 import { blogSchema, imageSchema, publishSchema } from "../zodSchema/blog";
+import { sign } from "hono/jwt";
 
 export async function getAllBlogs(c: Context) {
   try {
@@ -119,7 +120,7 @@ export async function updateBlog(c: Context) {
     console.log(id);
 
     const parsedInput = blogSchema.safeParse(await c.req.parseBody());
-    const parsedPhoto = imageSchema.safeParse(await c.req.parseBody());
+    console.log(parsedInput);
 
     if (parsedInput.success === false) {
       console.log("Invalid Input");
@@ -129,26 +130,18 @@ export async function updateBlog(c: Context) {
       );
     }
 
-    console.log(parsedInput);
-    console.log(parsedPhoto);
-
-    const { title, content } = parsedInput.data;
-
-    let photo;
-    if (parsedPhoto.success !== false) {
-      photo = parsedPhoto.data.photo;
-    }
+    const { title, content, photo } = parsedInput.data;
 
     let photourl;
 
     if (photo) {
       const fileArrayBuffer = await photo.arrayBuffer();
-
       // Convert ArrayBuffer to Base64
       const base64 = arrayBufferToBase64(fileArrayBuffer);
-
       photourl = `data:${photo.type};base64,${base64}`;
     }
+
+    console.log(photourl);
 
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL,
@@ -182,7 +175,7 @@ export async function postBlog(c: Context) {
     const userId = Number(c.get("id"));
     console.log(userId);
     const parsedInput = blogSchema.safeParse(await c.req.parseBody());
-    const parsedPhoto = imageSchema.safeParse(await c.req.parseBody());
+    console.log(parsedInput);
 
     if (parsedInput.success === false) {
       console.log("Invalid Input");
@@ -192,25 +185,18 @@ export async function postBlog(c: Context) {
       );
     }
 
-    console.log(parsedInput);
-    console.log(parsedPhoto);
-    const { title, content } = parsedInput.data;
-
-    let photo;
-    if (parsedPhoto.success !== false) {
-      photo = parsedPhoto.data.photo;
-    }
+    const { title, content, photo } = parsedInput.data;
 
     let photourl;
 
     if (photo) {
       const fileArrayBuffer = await photo.arrayBuffer();
-
       // Convert ArrayBuffer to Base64
       const base64 = arrayBufferToBase64(fileArrayBuffer);
-
       photourl = `data:${photo.type};base64,${base64}`;
     }
+
+    console.log(photourl);
 
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL,

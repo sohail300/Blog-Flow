@@ -14,6 +14,7 @@ const user = new Hono<{
   Bindings: {
     DATABASE_URL: string;
     JWT_SECRET: string;
+    MY_BUCKET: string;
   };
   Variables: {};
 }>();

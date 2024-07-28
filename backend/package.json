@@ -25,6 +25,6 @@
     "@types/react": "^18.3.3",
     "@types/uuid": "^10.0.0",
     "prisma": "^5.16.2",
-    "wrangler": "^3.57.2"
+    "wrangler": "^3.67.1"
   }
 }

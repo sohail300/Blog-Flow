@@ -9,6 +9,7 @@ const app = new Hono<{
   Bindings: {
     DATABASE_URL: string;
     JWT_SECRET: string;
+    MY_BUCKET: string;
   };
   Variables: {};
 }>();
@@ -18,16 +19,6 @@ app.use(cors());
 app.get("/", (c: Context) => {
   console.log("Healthy Server!");
   return c.text("Healthy Server!");
-});
-
-app.post("/test", async (c: Context) => {
-  try {
-    const body = await c.req.parseBody();
-    console.log(body);
-    return c.text("body");
-  } catch (error) {
-    console.log("[ERROR]", error);
-  }
 });
 
 app.get("/me", auth, (c: Context) => {

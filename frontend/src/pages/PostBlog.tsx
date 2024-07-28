@@ -74,7 +74,9 @@ const PostBlog = () => {
         const content = editorInstance.getMarkdown();
 
         const formData = new FormData();
-        formData.append("photo", newPhoto as File);
+        if (newPhoto) {
+          formData.append("photo", newPhoto as File);
+        }
         formData.append("title", title);
         formData.append("content", content);
         const response = await api.post("/api/blog/post", formData, {

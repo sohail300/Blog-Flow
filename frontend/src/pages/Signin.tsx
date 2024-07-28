@@ -16,6 +16,7 @@ import { AxiosError } from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { Copy } from "lucide-react";
 
 const Signin = () => {
   const [isSubmiting, setSubmiting] = useState(false);
@@ -29,6 +30,10 @@ const Signin = () => {
       password: "",
     },
   });
+
+  const copyToClipboard = async (text: string) => {
+    await navigator.clipboard.writeText(text);
+  };
 
   async function onSubmit(values: signinType) {
     try {
@@ -128,6 +133,27 @@ const Signin = () => {
                 Reset it here
               </Link>
             </p>
+
+            <div>
+              <p
+                className="text-center text-sm text-blue-600"
+                onClick={() => {}}
+              >
+                Credentials for trail (Click to copy)
+              </p>
+              <div
+                className="text-center text-gray-500 text-sm flex flex-row items-center justify-center mt-2 cursor-pointer"
+                onClick={() => copyToClipboard("test@test.com")}
+              >
+                Email: test@test.com <Copy className="ml-4" size={20} />
+              </div>
+              <div
+                className="text-center text-gray-500 text-sm flex flex-row items-center justify-center mt-2 cursor-pointer"
+                onClick={() => copyToClipboard("test123")}
+              >
+                Password: test123 <Copy className="ml-4" size={20} />
+              </div>
+            </div>
           </form>
         </Form>
       </div>
