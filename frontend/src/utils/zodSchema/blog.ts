@@ -19,8 +19,7 @@ export const imageSchema = z.object({
     .refine(
       (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
       "Only .jpg, .jpeg, .png, .webp, and .gif formats are supported."
-    )
-    .optional(),
+    ),
 });
 
 export const blogSchema = z.object({
@@ -32,6 +31,17 @@ export const blogSchema = z.object({
     .string()
     .min(20, "The content should be between 20 and 5000 characters")
     .max(5000, "The content should be between 20 and 5000 characters"),
+  photo: z
+    .instanceof(File)
+    .refine(
+      (file) => file.size <= MAX_FILE_SIZE,
+      `File size must be less than or equal to 10 MB.`
+    )
+    .refine(
+      (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
+      "Only .jpg, .jpeg, .png, .webp, and .gif formats are supported."
+    )
+    .optional(),
 });
 
 export const publishSchema = z.object({
