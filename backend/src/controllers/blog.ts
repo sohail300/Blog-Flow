@@ -3,7 +3,6 @@ import { withAccelerate } from "@prisma/extension-accelerate";
 import { Context } from "hono";
 import { StatusCode } from "../types/statusCode";
 import { blogSchema, imageSchema, publishSchema } from "../zodSchema/blog";
-import { sign } from "hono/jwt";
 
 export async function getAllBlogs(c: Context) {
   try {
@@ -12,6 +11,7 @@ export async function getAllBlogs(c: Context) {
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
+
     const blogs = await prisma.blog.findMany({
       where: {
         published: true,
@@ -19,7 +19,7 @@ export async function getAllBlogs(c: Context) {
       take: 5,
       skip: (page - 1) * 5,
       orderBy: {
-        id: "asc",
+        createdOn: "asc",
       },
       select: {
         id: true,
@@ -35,9 +35,43 @@ export async function getAllBlogs(c: Context) {
       },
     });
 
-    // console.log("All Blogs:", blogs);
     console.log("All Blogs");
+    return c.json({ blogs }, StatusCode.ok);
+  } catch (error) {
+    console.log("Error occured:", error);
+    return c.json({ error }, StatusCode.serverError);
+  }
+}
 
+export async function getViewMoreBlogs(c: Context) {
+  try {
+    const prisma = new PrismaClient({
+      datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());
+
+    const blogs = await prisma.blog.findMany({
+      where: {
+        published: true,
+      },
+      take: 5,
+      orderBy: {
+        createdOn: "desc",
+      },
+      select: {
+        id: true,
+        title: true,
+        createdOn: true,
+        photourl: true,
+        author: {
+          select: {
+            name: true,
+            photourl: true,
+          },
+        },
+      },
+    });
+
+    console.log("View More Blogs");
     return c.json({ blogs }, StatusCode.ok);
   } catch (error) {
     console.log("Error occured:", error);

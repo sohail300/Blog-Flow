@@ -13,6 +13,9 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Search } from "lucide-react";
 
 const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -73,42 +76,59 @@ const Home = () => {
   }
 
   return (
-    <div className="mx-auto pt-24 px-4">
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem
-            onClick={() => setPage((curr) => --curr)}
-            className=" cursor-pointer"
-          >
-            <PaginationPrevious />
-          </PaginationItem>
-          {Array(totalPages)
-            .fill(0)
-            .map((_item, index) => {
-              return (
-                <PaginationItem
-                  key={index}
-                  onClick={() => setPage(index + 1)}
-                  className=" cursor-pointer"
-                >
-                  <PaginationLink>{index + 1}</PaginationLink>
-                </PaginationItem>
-              );
-            })}
-          <PaginationItem
-            onClick={() => setPage((curr) => ++curr)}
-            className=" cursor-pointer"
-          >
-            <PaginationNext />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+    <div className="mx-auto pt-24 px-4 ">
+      <div className=" px-8 my-4 flex items-center justify-end">
+        <div className="flex">
+          <Input
+            type="text"
+            placeholder="Search..."
+            className="rounded-r-none border-r-0"
+          />
+          <Button size="icon" className="rounded-l-none bg-[#687368]">
+            <Search className="h-4 w-4  text-white" />
+          </Button>
+        </div>
+
+        <Pagination className=" border border-black w-fit fixed bottom-8 right-8 bg-gray-100 rounded-md">
+          <PaginationContent>
+            <PaginationItem
+              onClick={() => setPage((curr) => --curr)}
+              className=" cursor-pointer"
+            >
+              <PaginationPrevious />
+            </PaginationItem>
+            {Array(totalPages)
+              .fill(0)
+              .map((_item, index) => {
+                return (
+                  <PaginationItem
+                    key={index}
+                    onClick={() => setPage(index + 1)}
+                    className={`cursor-pointer ${
+                      index === page - 1 ? "bg-gray-300" : ""
+                    }`}
+                  >
+                    <PaginationLink>{index + 1}</PaginationLink>
+                  </PaginationItem>
+                );
+              })}
+            <PaginationItem
+              onClick={() => setPage((curr) => ++curr)}
+              className=" cursor-pointer"
+            >
+              <PaginationNext />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      </div>
+
       {blogs.map((blog: Blog) => {
         return (
           <div className="mx-auto py-4 px-4" key={blog.id}>
             <BlogCard
               id={blog.id}
               title={blog.title}
+              content={blog.content}
               createdOn={blog.createdOn}
               photourl={blog.photourl}
               authorName={blog.author?.name}

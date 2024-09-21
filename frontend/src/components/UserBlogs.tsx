@@ -16,6 +16,8 @@ import { AxiosError } from "axios";
 import { useToast } from "./ui/use-toast";
 import { Switch } from "@/components/ui/switch";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import Loader from "./Loader";
 
 interface Details {
   blogs: Blog[] | undefined;
@@ -25,9 +27,11 @@ interface Details {
 const UserBlogs = ({ blogs, getDetails }: Details) => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   async function handleDeleteBlog(id: number) {
     try {
+      setIsLoading(true);
       const response = await api.delete(`/api/blog/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -51,11 +55,14 @@ const UserBlogs = ({ blogs, getDetails }: Details) => {
         title: "Error deleting blog!",
         description: "Please try again.",
       });
+    } finally {
+      setIsLoading(false);
     }
   }
 
   async function handlePublish(id: number, checked: boolean) {
     try {
+      setIsLoading(true);
       const response = await api.put(
         `/api/blog/publish/${id}`,
         { publish: checked },
@@ -83,7 +90,13 @@ const UserBlogs = ({ blogs, getDetails }: Details) => {
         title: "Error changing visibility!",
         description: "Please try again.",
       });
+    } finally {
+      setIsLoading(false);
     }
+  }
+
+  if (isLoading) {
+    return <Loader />;
   }
 
   return (
@@ -120,17 +133,9 @@ const UserBlogs = ({ blogs, getDetails }: Details) => {
                 <td className="px-6 py-4">
                   {formatDate(new Date(blog.createdOn))}
                 </td>
-                {/* <td className="px-6 py-4">
-                  <span
-                    
-                  >
-                    {blog.published ? "Yes" : "No"}
-                  </span>
-                </td> */}
                 <td className="px-6 py-4">
-                  {/* onSubmit={form.handleSubmit(onSubmit)} */}
                   <Switch
-                    className={` ${
+                    className={`${
                       blog.published ? "bg-green-500 " : "bg-yellow-500"
                     }`}
                     checked={blog.published}

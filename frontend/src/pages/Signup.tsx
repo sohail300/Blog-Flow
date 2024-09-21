@@ -71,7 +71,7 @@ const Signup = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white to-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-[#EEECDF] mt-8">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-xl shadow-lg">
         <h2 className="text-3xl font-bold text-center text-gray-800">
           Sign Up

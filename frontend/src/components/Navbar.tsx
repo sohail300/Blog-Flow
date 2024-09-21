@@ -1,5 +1,6 @@
 import { api } from "@/utils/config";
 import { AxiosError } from "axios";
+import { ScrollText } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -47,34 +48,35 @@ const Navbar = () => {
   return (
     <>
       {isLoggedIn === false ? (
-        <nav className="bg-white border-b border-gray-200 py-4 md:py-6 shadow-sm fixed top-0 w-full">
+        <nav className="bg-[#eeecdf] border-b border-gray-200 py-4 md:py-6 shadow-sm fixed top-0 w-full">
           <div className="container mx-auto px-4 md:px-6">
             <div className="flex justify-between items-center">
               <Link to={"/"}>
-                <div className="text-gray-800 font-bold text-2xl md:text-3xl">
+                <div className=" flex items-center text-[#687368] font-bold text-2xl md:text-3xl">
+                  <ScrollText className=" w-8 h-8 mr-2" />
                   BlogFlow
                 </div>
               </Link>
               <div className="hidden md:flex items-center space-x-8">
                 <Link to={"/"}>
-                  <button className="text-gray-600 hover:text-gray-800 transition duration-300 ease-in-out text-lg">
+                  <button className="text-gray-600 hover:text-gray-800 hover:bg-gray-100 py-1 px-2 rounded-sm  transition duration-300 ease-in-out text-lg">
                     Blogs
                   </button>
                 </Link>
                 <Link to={"/signin"}>
-                  <button className="text-gray-600 hover:text-gray-800 transition duration-300 ease-in-out text-lg">
+                  <button className="text-gray-600 hover:text-gray-800 hover:bg-gray-100 py-1 px-2 rounded-sm  transition duration-300 ease-in-out text-lg">
                     Sign In
                   </button>
                 </Link>
                 <Link to={"/signup"}>
-                  <button className="text-gray-600 hover:text-gray-800 transition duration-300 ease-in-out text-lg">
+                  <button className=" flex items-center text-gray-600 hover:text-gray-800 hover:bg-gray-100 py-1 px-2 rounded-sm  transition duration-300 ease-in-out text-lg">
                     Sign Up
                   </button>
                 </Link>
               </div>
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="md:hidden text-gray-600 hover:text-gray-800 focus:outline-none"
+                className="md:hidden text-gray-600 hover:text-gray-800 hover:bg-gray-100 py-1 px-2 rounded-sm  focus:outline-none"
               >
                 <svg
                   className="h-6 w-6"
@@ -117,32 +119,33 @@ const Navbar = () => {
           </div>
         </nav>
       ) : (
-        <nav className="bg-white border-b border-gray-200 py-4 md:py-6 shadow-sm fixed top-0 w-full">
+        <nav className="bg-[#eeecdf] border-b border-gray-200 py-4 md:py-6 shadow-sm fixed top-0 w-full">
           <div className="container mx-auto px-4 md:px-6">
             <div className="flex justify-between items-center">
               <Link to={"/"}>
-                <div className="text-gray-800 font-bold text-2xl md:text-3xl">
+                <div className="flex items-center text-[#687368] font-bold text-2xl md:text-3xl">
+                  <ScrollText className=" w-8 h-8 mr-2" />
                   BlogFlow
                 </div>
               </Link>
               <div className="hidden md:flex items-center space-x-8">
                 <Link to={"/"}>
-                  <button className="text-gray-600 hover:text-gray-800 transition duration-300 ease-in-out text-lg">
+                  <button className="text-gray-600 hover:text-gray-800 hover:bg-gray-100 py-1 px-2 rounded-sm transition duration-300 ease-in-out text-lg ">
                     Blogs
                   </button>
                 </Link>
                 <Link to={"/blog/post"}>
-                  <button className="text-gray-600 hover:text-gray-800 transition duration-300 ease-in-out text-lg">
+                  <button className="text-gray-600 hover:text-gray-800 hover:bg-gray-100 py-1 px-2 rounded-sm  transition duration-300 ease-in-out text-lg">
                     Post Blog
                   </button>
                 </Link>
                 <Link to={"/profile"}>
-                  <button className="text-gray-600 hover:text-gray-800 transition duration-300 ease-in-out text-lg">
+                  <button className="text-gray-600 hover:text-gray-800 hover:bg-gray-100 py-1 px-2 rounded-sm  transition duration-300 ease-in-out text-lg">
                     Profile
                   </button>
                 </Link>
                 <button
-                  className="text-gray-600 hover:text-gray-800 transition duration-300 ease-in-out text-lg"
+                  className="text-gray-600 hover:text-gray-800 hover:bg-gray-100 py-1 px-2 rounded-sm  transition duration-300 ease-in-out text-lg"
                   onClick={() => handleLogout()}
                 >
                   Logout
@@ -150,7 +153,7 @@ const Navbar = () => {
               </div>
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="md:hidden text-gray-600 hover:text-gray-800 focus:outline-none"
+                className="md:hidden text-gray-600 hover:text-gray-800 hover:bg-gray-100 py-1 px-2 rounded-sm  focus:outline-none"
               >
                 <svg
                   className="h-6 w-6"
