@@ -7,6 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { AxiosError } from "axios";
 import Loader from "@/components/Loader";
 import { ApiErrorResponse } from "@/utils/interfaces";
+import "./Editor.css";
 
 const EditBlog = () => {
   const editorRef = useRef(null);
@@ -79,6 +80,18 @@ const EditBlog = () => {
     }
   };
 
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    setNewPhoto(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhoto(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handlePublish = async () => {
     if (title.trim() === "") {
       toast({
@@ -100,6 +113,13 @@ const EditBlog = () => {
         //@ts-expect-error getInstance is valid.
         const editorInstance = editorRef.current.getInstance();
         const content = editorInstance.getMarkdown();
+
+        if (content.length < 20 || content.length > 20000) {
+          toast({
+            title: "Content should be between 20 and 20000 characters!",
+          });
+          return;
+        }
 
         const formData = new FormData();
         if (newPhoto) {
@@ -186,9 +206,7 @@ const EditBlog = () => {
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={(e) =>
-                    setNewPhoto(e.target.files ? e.target.files[0] : null)
-                  }
+                  onChange={(e) => handlePhotoChange(e)}
                   className="hidden"
                   id="photo-upload"
                 />
@@ -220,13 +238,15 @@ const EditBlog = () => {
           {title.length}/100 characters
         </p>
       </div>
-      <Editor
-        previewStyle="vertical"
-        height="500px"
-        initialEditType="markdown"
-        initialValue={content}
-        ref={editorRef}
-      />
+      <div className="editor-wrapper">
+        <Editor
+          previewStyle="vertical"
+          height="500px"
+          initialEditType="markdown"
+          initialValue={content}
+          ref={editorRef}
+        />
+      </div>
     </div>
   );
 };

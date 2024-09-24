@@ -21,7 +21,7 @@ const blog = new Hono<{
 }>();
 
 blog.get("/all", getAllBlogs);
-blog.get("/view-more", getViewMoreBlogs);
+blog.get("/view-more/:blogid", getViewMoreBlogs);
 blog.get("/length", getPageLength);
 blog.get("/:id", getSingleBlog);
 blog.put("/:id", auth, updateBlog);

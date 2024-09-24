@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 import Loader from "@/components/Loader";
 import { ApiErrorResponse } from "@/utils/interfaces";
+import "./Editor.css";
 
 const PostBlog = () => {
   const editorRef = useRef(null);
@@ -15,6 +16,7 @@ const PostBlog = () => {
   const [titleError, setTitleError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [newPhoto, setNewPhoto] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -51,6 +53,18 @@ const PostBlog = () => {
     }
   };
 
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    setNewPhoto(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhotoPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handlePublish = async () => {
     if (title.trim() === "") {
       toast({
@@ -72,6 +86,13 @@ const PostBlog = () => {
         //@ts-expect-error getInstance is valid.
         const editorInstance = editorRef.current.getInstance();
         const content = editorInstance.getMarkdown();
+
+        if (content.length < 20 || content.length > 20000) {
+          toast({
+            title: "Content should be between 20 and 20000 characters!",
+          });
+          return;
+        }
 
         const formData = new FormData();
         if (newPhoto) {
@@ -135,9 +156,7 @@ const PostBlog = () => {
           <input
             type="file"
             accept="image/*"
-            onChange={(e) =>
-              setNewPhoto(e.target.files ? e.target.files[0] : null)
-            }
+            onChange={handlePhotoChange}
             className="hidden"
             id="photo-upload"
           />
@@ -166,13 +185,24 @@ const PostBlog = () => {
           {title.length}/100 characters
         </p>
       </div>
-      <Editor
-        previewStyle="vertical"
-        height="400px"
-        initialEditType="markdown"
-        initialValue="### Start writing your blog here."
-        ref={editorRef}
-      />
+      {photoPreview && (
+        <div className="mb-4">
+          <img
+            src={photoPreview}
+            alt="Blog cover preview"
+            className="w-32 h-32 object-cover rounded-lg shadow-md"
+          />
+        </div>
+      )}
+      <div className="editor-wrapper">
+        <Editor
+          previewStyle="vertical"
+          height="400px"
+          initialEditType="markdown"
+          initialValue="### Start writing your blog here."
+          ref={editorRef}
+        />
+      </div>
     </div>
   );
 };

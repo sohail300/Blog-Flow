@@ -70,8 +70,13 @@
 
 body {
   background: #eeecdf;
+  font-family: "Asap", sans-serif;
 }
 
 ::-webkit-scrollbar {
   display: none;
+}
+
+.markdown > * {
+  all: revert;
 }

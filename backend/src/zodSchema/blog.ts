@@ -29,8 +29,8 @@ export const blogSchema = z.object({
     .max(100, "The title should be between 1 and 100 characters"),
   content: z
     .string()
-    .min(20, "The content should be between 20 and 5000 characters")
-    .max(5000, "The content should be between 20 and 5000 characters"),
+    .min(20, "The content should be between 20 and 20000 characters")
+    .max(20000, "The content should be between 20 and 20000 characters"),
   photo: z
     .instanceof(File)
     .refine(

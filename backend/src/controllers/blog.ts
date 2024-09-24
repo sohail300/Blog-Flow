@@ -3,6 +3,7 @@ import { withAccelerate } from "@prisma/extension-accelerate";
 import { Context } from "hono";
 import { StatusCode } from "../types/statusCode";
 import { blogSchema, imageSchema, publishSchema } from "../zodSchema/blog";
+import { generateDescription } from "../utils/generateDescription";
 
 export async function getAllBlogs(c: Context) {
   try {
@@ -24,6 +25,8 @@ export async function getAllBlogs(c: Context) {
       select: {
         id: true,
         title: true,
+        description: true,
+        content: true,
         createdOn: true,
         photourl: true,
         author: {
@@ -45,6 +48,8 @@ export async function getAllBlogs(c: Context) {
 
 export async function getViewMoreBlogs(c: Context) {
   try {
+    const blogid = Number(c.req.param("blogid"));
+
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
@@ -53,7 +58,7 @@ export async function getViewMoreBlogs(c: Context) {
       where: {
         published: true,
       },
-      take: 5,
+      take: 6,
       orderBy: {
         createdOn: "desc",
       },
@@ -71,8 +76,11 @@ export async function getViewMoreBlogs(c: Context) {
       },
     });
 
+    const finalBlogs = blogs.filter((blog) => blog.id !== blogid);
+    const firstFiveBlogs = finalBlogs.slice(0, 4);
+
     console.log("View More Blogs");
-    return c.json({ blogs }, StatusCode.ok);
+    return c.json({ firstFiveBlogs }, StatusCode.ok);
   } catch (error) {
     console.log("Error occured:", error);
     return c.json({ error }, StatusCode.serverError);
@@ -117,6 +125,7 @@ export async function getSingleBlog(c: Context) {
       select: {
         id: true,
         title: true,
+        description: true,
         content: true,
         createdOn: true,
         photourl: true,
@@ -181,6 +190,8 @@ export async function updateBlog(c: Context) {
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
 
+    const description = await generateDescription(c, content);
+
     const blog = await prisma.blog.update({
       where: {
         id,
@@ -189,6 +200,7 @@ export async function updateBlog(c: Context) {
       data: {
         title,
         content,
+        description,
         photourl,
       },
       select: {
@@ -235,9 +247,13 @@ export async function postBlog(c: Context) {
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
+
+    const description = (await generateDescription(c, content)) || "";
+
     const blog = await prisma.blog.create({
       data: {
         title,
+        description,
         content,
         photourl,
         authorId: userId,
