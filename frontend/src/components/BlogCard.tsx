@@ -7,27 +7,29 @@ import { ExternalLink } from "lucide-react";
 const BlogCard = ({
   id,
   title,
-  content,
+  description,
   createdOn,
   photourl,
   authorName,
   authorPhoto,
 }: Blog) => {
-  const date = formatDate(new Date(createdOn));
   const navigate = useNavigate();
-
-  // let truncatedContent = "";
-  // if (content) {
-  //   truncatedContent =
-  //     typeof content === "string"
-  //       ? content.slice(0, 100) + (content.length > 100 ? "..." : "")
-  //       : "";
-  // }
+  const date = formatDate(new Date(createdOn));
 
   return (
-    <div className="w-full md:w-3/4 mx-auto bg-[#FDFBF7] shadow-lg rounded-lg overflow-hidden h-56">
-      <div className="flex h-full">
-        <div className="w-2/3 p-4 flex flex-col justify-between">
+    <div className="w-full md:w-3/4 mx-auto bg-[#FDFBF7] shadow-lg rounded-lg overflow-hidden">
+      <div className="flex flex-col md:flex-row md:h-56">
+        <div className="w-full md:w-1/3 h-48 md:h-full">
+          <img
+            className="w-full h-full object-cover object-center"
+            src={
+              photourl ||
+              "https://res.cloudinary.com/dwuzfbivo/image/upload/v1720976345/blogflow/placeholder1_vdiazo.jpg"
+            }
+            alt={title}
+          />
+        </div>
+        <div className="w-full md:w-2/3 p-4 flex flex-col justify-between">
           <div>
             <div className="flex items-center mb-2">
               <img
@@ -45,30 +47,20 @@ const BlogCard = ({
                 <p className="text-gray-600 text-sm">{date}</p>
               </div>
             </div>
-            <h2 className="text-lg font-bold text-[#687368] mb-2 line-clamp-2">
+            <h2 className="text-lg font-bold text-[#687368] mb-2 line-clamp-1">
               {title}
             </h2>
-            <ReactMarkdown className="line-clamp-2">{content}</ReactMarkdown>
-            {/* <ReactMarkdown className="line-clamp-2 markdown">
-              {content}
-            </ReactMarkdown> */}
-            <div className=" flex justify-end mt-4">
-              <button
-                className=" flex items-center justify-center rounded-lg bg-black/90 text-white p-2"
-                onClick={() => navigate(`/blog/view/${id}`)}
-              >
-                <span className=" text-sm">Read More</span>
-                <ExternalLink className=" ml-2 w-5 h-5" />
-              </button>
-            </div>
+            <div className="line-clamp-2">{description}</div>
           </div>
-        </div>
-        <div className="w-1/3 h-full">
-          <img
-            className="w-full h-full object-cover object-center"
-            src={photourl || "/placeholder1.jpg"}
-            alt={title}
-          />
+          <div className="flex justify-end mt-4">
+            <button
+              className="flex items-center justify-center rounded-lg bg-black/90 text-white p-2"
+              onClick={() => navigate(`/blog/view/${id}`)}
+            >
+              <span className="text-sm">Read More</span>
+              <ExternalLink className="ml-2 w-5 h-5" />
+            </button>
+          </div>
         </div>
       </div>
     </div>

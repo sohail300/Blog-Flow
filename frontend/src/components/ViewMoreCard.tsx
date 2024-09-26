@@ -21,7 +21,10 @@ const SuggestedBlogCard = ({
       <div className="h-32">
         <img
           className="w-full h-full object-cover object-center"
-          src={photourl || "/placeholder1.jpg"}
+          src={
+            photourl ||
+            "https://res.cloudinary.com/dwuzfbivo/image/upload/v1720976345/blogflow/placeholder1_vdiazo.jpg"
+          }
           alt={title}
         />
       </div>

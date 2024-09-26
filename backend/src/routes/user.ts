@@ -5,6 +5,7 @@ import {
   forgotPasswordSendMail,
   getUserDetails,
   updatePhoto,
+  updateSubscription,
   updateUser,
   userIsVerified,
 } from "../controllers/user";
@@ -23,6 +24,7 @@ user.delete("/delete", auth, deletUser);
 user.get("/details", auth, getUserDetails);
 user.post("/update", auth, updateUser);
 user.put("/updatePhoto", auth, updatePhoto);
+user.put("/updateSubscription", auth, updateSubscription);
 user.get("/isVerified", auth, userIsVerified);
 
 // Forgot Password

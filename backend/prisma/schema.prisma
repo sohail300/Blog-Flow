@@ -25,6 +25,7 @@ model User {
   forgotPasswordToken       String?
   expiryforgotPasswordToken DateTime?
   blogs                     Blog[]
+  emailNotificationsEnabled Boolean   @default(false)
 }
 
 model Blog {
@@ -37,4 +38,9 @@ model Blog {
   photourl    String?
   author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId    Int
+}
+
+model Subscription {
+  id    Int    @id @default(autoincrement())
+  email String @unique
 }

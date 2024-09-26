@@ -15,22 +15,26 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface UserDetailsProps {
   getDetails: () => void; // Adjust the function signature as needed
 }
 
 const UserDetails = ({
+  id,
+  getDetails,
   name,
   email,
   photourl,
   isVerified,
-  getDetails,
+  emailNotificationsEnabled,
 }: User & UserDetailsProps) => {
   const [newName, setNewName] = useState(name);
   const [isSending, setIsSending] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isPhotoUpdating, setIsPhotoUpdating] = useState(false);
+  const [subsribe, setSubscribe] = useState(emailNotificationsEnabled);
   const [newPhoto, setNewPhoto] = useState<File | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -142,6 +146,15 @@ const UserDetails = ({
 
   async function handleDeleteUser() {
     try {
+      if (email === "test@test.com") {
+        toast({
+          variant: "destructive",
+          title: "Cannot delete test user!",
+          description: "As this is a test user, it cannot be deleted.",
+        });
+        return;
+      }
+
       const response = await api.delete("/api/user/delete", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -164,6 +177,40 @@ const UserDetails = ({
       toast({
         variant: "destructive",
         title: "Error deleting user!",
+        description: "Please try again.",
+      });
+    }
+  }
+
+  async function handleEmailNotification(id: number, checked: boolean) {
+    try {
+      console.log(checked);
+      setSubscribe(checked);
+      const response = await api.put(
+        `/api/user/updateSubscription`,
+        { subscribe: checked },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (response) {
+        toast({
+          title: "Email notifications updated!",
+          style: {
+            backgroundColor: "#dff0e0",
+            borderColor: "#7f9f7f",
+            color: "#388e3c",
+          },
+        });
+        // getDetails();
+      }
+    } catch (error) {
+      console.log(error as AxiosError);
+      toast({
+        variant: "destructive",
+        title: "Error updating subscription!",
         description: "Please try again.",
       });
     }
@@ -192,14 +239,14 @@ const UserDetails = ({
           />
           <label
             htmlFor="photo-upload"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer mr-2"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold text-center py-2 px-4 rounded cursor-pointer mr-2"
           >
             Choose Photo
           </label>
           <button
             onClick={handlePhotoUpdate}
             disabled={!newPhoto || isPhotoUpdating}
-            className={`bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ${
+            className={`bg-green-500 hover:bg-green-700 text-white font-bold text-center py-2 px-4 rounded ${
               !newPhoto || isUpdating ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
@@ -258,6 +305,16 @@ const UserDetails = ({
           placeholder="Email"
           disabled
         />
+      </div>
+      <div className=" flex flex-row justify-start items-center mb-4">
+        <Checkbox
+          className=" mr-2"
+          checked={subsribe}
+          onCheckedChange={(checked) => {
+            handleEmailNotification(id || 0, checked);
+          }}
+        />
+        <span>Get Notified everytime a new blog is published</span>
       </div>
       <div className="flex items-center mb-4">
         <span className="text-sm mr-2">Verified:</span>

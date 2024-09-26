@@ -56,6 +56,7 @@ const Profile = () => {
               email={details?.email}
               photourl={details?.photourl}
               isVerified={details?.isVerified}
+              emailNotificationsEnabled={details?.emailNotificationsEnabled}
               blogs={details?.blogs}
             />
           </div>

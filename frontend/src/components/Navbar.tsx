@@ -119,7 +119,7 @@ const Navbar = () => {
           </div>
         </nav>
       ) : (
-        <nav className="bg-[#eeecdf] border-b border-gray-200 py-4 md:py-6 shadow-sm fixed top-0 w-full">
+        <nav className="bg-[#eeecdf] border-b border-gray-200 py-4 md:py-6 shadow-sm fixed top-0 w-full z-50">
           <div className="container mx-auto px-4 md:px-6">
             <div className="flex justify-between items-center">
               <Link to={"/"}>

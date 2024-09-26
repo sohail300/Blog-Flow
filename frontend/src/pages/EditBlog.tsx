@@ -166,11 +166,11 @@ const EditBlog = () => {
   }
 
   return (
-    <div className="mt-28 mx-auto p-6">
+    <div className="mt-28 mx-auto p-4 md:p-6 w-full">
       <div className="mb-6">
-        <div className="mx-auto p-4 sm:p-6 bg-white rounded-lg shadow-lg">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
-            <div className="w-full sm:flex-grow">
+        <div className="mx-auto p-4 md:p-6 bg-white rounded-lg shadow-lg">
+          <div className="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-4">
+            <div className="w-full md:flex-grow">
               <label
                 htmlFor="blog-title"
                 className="block text-base font-medium text-gray-700 mb-2"
@@ -192,17 +192,17 @@ const EditBlog = () => {
               )}
             </div>
 
-            <div className="flex items-center space-x-4 sm:flex-shrink-0">
+            <div className="flex items-center space-x-4 md:flex-shrink-0">
               <img
                 src={
                   photo ||
                   "https://res.cloudinary.com/dwuzfbivo/image/upload/v1720976345/blogflow/placeholder1_vdiazo.jpg"
                 }
                 alt="Blog cover"
-                className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg shadow-md"
+                className="w-20 h-20 md:w-24 md:h-24 object-cover rounded-lg shadow-md"
               />
 
-              <div className="flex sm:flex-col space-x-2 sm:space-x-0 sm:space-y-2">
+              <div className="flex flex-col space-y-2">
                 <input
                   type="file"
                   accept="image/*"
@@ -212,7 +212,7 @@ const EditBlog = () => {
                 />
                 <label
                   htmlFor="photo-upload"
-                  className="inline-block bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium py-2 px-3 rounded-lg cursor-pointer transition"
+                  className="inline-block bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium py-2 px-3 rounded-lg cursor-pointer transition text-center"
                 >
                   Choose Photo
                 </label>
@@ -231,9 +231,6 @@ const EditBlog = () => {
             </div>
           </div>
         </div>
-        {titleError && (
-          <p className="text-red-500 text-sm mt-1">{titleError}</p>
-        )}
         <p className="text-sm text-gray-500 mt-1">
           {title.length}/100 characters
         </p>

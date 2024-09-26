@@ -1,6 +1,7 @@
 export interface Blog {
   id: number;
   title: string;
+  description?: string;
   content?: string;
   createdOn: Date;
   published?: boolean;
@@ -19,6 +20,7 @@ export interface User {
   email: string | undefined;
   photourl: string | undefined;
   isVerified: boolean | undefined;
+  emailNotificationsEnabled: boolean | undefined;
   blogs: Blog[] | undefined;
 }
 

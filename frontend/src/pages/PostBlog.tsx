@@ -140,43 +140,45 @@ const PostBlog = () => {
   }
 
   return (
-    <div className="mt-28 mx-auto p-6">
+    <div className="mt-28 mx-auto p-4 md:p-6 w-full">
       <div className="mb-6">
-        <div className="flex items-center space-x-4 mb-2">
+        <div className="flex flex-col md:flex-row items-stretch md:items-center space-y-4 md:space-y-0 md:space-x-4 mb-2">
           <input
             type="text"
             value={title}
             onChange={handleTitleChange}
             placeholder="Enter blog title"
-            className={`flex-grow px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+            className={`w-full md:flex-grow px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
               titleError ? "border-red-500" : "border-gray-300"
             }`}
             maxLength={100}
           />
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handlePhotoChange}
-            className="hidden"
-            id="photo-upload"
-          />
-          <label
-            htmlFor="photo-upload"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer mr-2"
-          >
-            Choose Photo
-          </label>
-          <button
-            onClick={handlePublish}
-            disabled={isPublishDisabled}
-            className={`px-6 py-2 rounded-md text-white font-semibold transition duration-300 ease-in-out ${
-              isPublishDisabled
-                ? "bg-blue-400 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700 active:bg-blue-800"
-            }`}
-          >
-            {isPublishing ? "Publishing..." : "Publish"}
-          </button>
+          <div className="flex space-x-2 justify-center items-center">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handlePhotoChange}
+              className="hidden"
+              id="photo-upload"
+            />
+            <label
+              htmlFor="photo-upload"
+              className="w-full md:w-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer text-center"
+            >
+              Choose Photo
+            </label>
+            <button
+              onClick={handlePublish}
+              disabled={isPublishDisabled}
+              className={`w-full md:w-auto px-6 py-2 rounded-md text-white font-semibold transition duration-300 ease-in-out ${
+                isPublishDisabled
+                  ? "bg-blue-400 cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-700 active:bg-blue-800"
+              }`}
+            >
+              {isPublishing ? "Publishing..." : "Publish"}
+            </button>
+          </div>
         </div>
         {titleError && (
           <p className="text-red-500 text-sm mt-1">{titleError}</p>

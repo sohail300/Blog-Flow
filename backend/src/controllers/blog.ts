@@ -4,6 +4,7 @@ import { Context } from "hono";
 import { StatusCode } from "../types/statusCode";
 import { blogSchema, imageSchema, publishSchema } from "../zodSchema/blog";
 import { generateDescription } from "../utils/generateDescription";
+import { sendNotificationMail } from "../utils/sendNotificationMail";
 
 export async function getAllBlogs(c: Context) {
   try {
@@ -262,6 +263,8 @@ export async function postBlog(c: Context) {
         id: true,
       },
     });
+
+    await sendNotificationMail(c, blog.id, title);
 
     console.log("Updated");
     return c.json({ id: blog.id }, StatusCode.dataWritten);

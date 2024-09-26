@@ -179,7 +179,7 @@ const Home = () => {
           <BlogCard
             id={blog.id}
             title={blog.title}
-            content={blog.content}
+            description={blog.description}
             createdOn={blog.createdOn}
             photourl={blog.photourl}
             authorName={blog.author?.name}

@@ -102,7 +102,7 @@ const UserBlogs = ({ blogs, getDetails }: Details) => {
   return (
     <div className="bg-white shadow-md rounded-lg p-6">
       <h2 className="text-2xl font-semibold mb-4">My Blogs</h2>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto scrollbar-visible">
         <table className="w-full text-sm text-center text-gray-500">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>

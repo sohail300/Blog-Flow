@@ -52,6 +52,7 @@ export async function getUserDetails(c: Context) {
         email: true,
         photourl: true,
         isVerified: true,
+        emailNotificationsEnabled: true,
         blogs: {
           select: {
             id: true,
@@ -167,6 +168,47 @@ export async function updatePhoto(c: Context) {
 
     console.log("Profile photo updated");
     return c.json({ msg: "Profile photo updated" }, 201);
+  } catch (error) {
+    console.log("Error occured:", error);
+    return c.json({ error }, StatusCode.serverError);
+  }
+}
+
+export async function updateSubscription(c: Context) {
+  try {
+    const id = c.get("id");
+    const { subscribe } = await c.req.json();
+    console.log(subscribe);
+
+    // Update user in database
+    const prisma = new PrismaClient({
+      datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());
+
+    const user = await prisma.user.update({
+      where: { id },
+      data: { emailNotificationsEnabled: subscribe },
+      select: {
+        email: true,
+      },
+    });
+
+    if (subscribe === true) {
+      await prisma.subscription.create({
+        data: {
+          email: user.email,
+        },
+      });
+    } else if (subscribe === false) {
+      await prisma.subscription.deleteMany({
+        where: {
+          email: user.email,
+        },
+      });
+    }
+
+    console.log("Subscription updated");
+    return c.json({ msg: "Subscription updated" }, 201);
   } catch (error) {
     console.log("Error occured:", error);
     return c.json({ error }, StatusCode.serverError);

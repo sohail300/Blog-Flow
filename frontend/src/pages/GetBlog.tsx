@@ -85,13 +85,32 @@ const GetBlog = () => {
     showMoreBlogs();
   }, [id]);
 
+  const components = {
+    code({ node, inline, className, children, ...props }) {
+      const match = /language-(\w+)/.exec(className || "");
+      return !inline && match ? (
+        <div className="overflow-x-auto">
+          <pre className="bg-gray-100 w-fit p-4 rounded-lg">
+            <code className={className} {...props}>
+              {children}
+            </code>
+          </pre>
+        </div>
+      ) : (
+        <code className={className} {...props}>
+          {children}
+        </code>
+      );
+    },
+  };
+
   if (isLoading) {
     return <Loader />;
   }
 
   return (
-    <div className="mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-28">
-      <div className="relative z-10 max-w-4xl mx-auto -mb-24">
+    <div className="mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 mt-20 sm:mt-28">
+      <div className="relative z-10 max-w-4xl mx-auto -mb-12 sm:-mb-24">
         <div className="flex flex-col md:flex-row">
           <img
             src={
@@ -99,14 +118,14 @@ const GetBlog = () => {
               "https://res.cloudinary.com/dwuzfbivo/image/upload/v1720976345/blogflow/placeholder1_vdiazo.jpg"
             }
             alt={blog.title}
-            className="w-full md:w-2/5 h-80 object-cover rounded-lg shadow-lg shadow-gray-700/60"
+            className="w-full md:w-2/5 h-48 sm:h-80 object-cover rounded-lg shadow-lg shadow-gray-700/60"
           />
-          <div className="px-6 flex flex-col justify-between space-y-4 md:w-3/5">
-            <div className="flex flex-col justify-between ">
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">
+          <div className="mt-4 md:mt-0 md:ml-6 flex flex-col justify-between space-y-12 md:space-y-4 md:w-3/5">
+            <div className="flex flex-col justify-between">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-4">
                 {blog.title}
               </h1>
-              <p className="text-gray-600">
+              <p className="text-sm sm:text-base text-gray-600">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
                 Perspiciatis rerum veniam nihil facilis corporis nobis labore
                 dolor corrupti veritatis repellat placeat expedita nam
@@ -114,7 +133,7 @@ const GetBlog = () => {
                 blanditiis.
               </p>
             </div>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between px-4 md:px-0">
               <div className="flex items-center">
                 <img
                   src={
@@ -122,13 +141,13 @@ const GetBlog = () => {
                     "https://res.cloudinary.com/dwuzfbivo/image/upload/v1720976345/blogflow/placeholder1_vdiazo.jpg"
                   }
                   alt={blog.author.name}
-                  className="w-12 h-12 rounded-full mr-4 object-cover"
+                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-full mr-2 sm:mr-4 object-cover"
                 />
                 <div>
-                  <p className="text-base font-semibold text-gray-900">
+                  <p className="text-sm sm:text-base font-semibold text-gray-900">
                     {blog.author.name}
                   </p>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-xs sm:text-sm text-gray-600">
                     {new Date(blog.createdOn).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "long",
@@ -139,7 +158,7 @@ const GetBlog = () => {
               </div>
               <div className="p-2 border border-black rounded-full flex justify-center items-center shadow-2xl shadow-gray-700/70">
                 <Share2
-                  className="text-black cursor-pointer w-6 h-6"
+                  className="text-black cursor-pointer w-5 h-5 sm:w-6 sm:h-6"
                   onClick={() => copyToClipboard()}
                 />
               </div>
@@ -147,17 +166,19 @@ const GetBlog = () => {
           </div>
         </div>
       </div>
-      <article className="relative z-0 bg-[#FDFBF7] shadow-lg rounded-lg pt-16 mt-4">
-        <div className="px-12 py-8 prose prose-lg max-w-none">
-          <ReactMarkdown className={"markdown"}>{blog.content}</ReactMarkdown>
+      <article className="relative z-0 bg-[#FDFBF7] shadow-lg rounded-lg pt-12 sm:pt-16 mt-0">
+        <div className="px-4 sm:px-12 py-6 sm:py-8 prose prose-sm sm:prose-lg max-w-none">
+          <ReactMarkdown className="markdown" components={components}>
+            {blog.content}
+          </ReactMarkdown>
         </div>
       </article>
 
-      <div className="rounded-lg mt-10">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">
+      <div className="rounded-lg mt-6 sm:mt-10">
+        <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-2 sm:mb-4">
           Suggested Reads
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {viewMoreBlogs.map((blog) => (
             <SuggestedBlogCard
               key={blog.id}
