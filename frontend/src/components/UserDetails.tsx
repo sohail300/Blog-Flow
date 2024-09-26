@@ -22,7 +22,6 @@ interface UserDetailsProps {
 }
 
 const UserDetails = ({
-  id,
   getDetails,
   name,
   email,
@@ -182,7 +181,7 @@ const UserDetails = ({
     }
   }
 
-  async function handleEmailNotification(id: number, checked: boolean) {
+  async function handleEmailNotification(checked: boolean) {
     try {
       console.log(checked);
       setSubscribe(checked);
@@ -311,7 +310,7 @@ const UserDetails = ({
           className=" mr-2"
           checked={subsribe}
           onCheckedChange={(checked) => {
-            handleEmailNotification(id || 0, checked);
+            handleEmailNotification(checked === true);
           }}
         />
         <span>Get Notified everytime a new blog is published</span>

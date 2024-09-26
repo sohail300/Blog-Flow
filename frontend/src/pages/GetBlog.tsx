@@ -86,7 +86,16 @@ const GetBlog = () => {
   }, [id]);
 
   const components = {
-    code({ node, inline, className, children, ...props }) {
+    code({
+      inline,
+      className,
+      children,
+      ...props
+    }: {
+      inline?: boolean;
+      className?: string;
+      children?: React.ReactNode;
+    }) {
       const match = /language-(\w+)/.exec(className || "");
       return !inline && match ? (
         <div className="overflow-x-auto">
