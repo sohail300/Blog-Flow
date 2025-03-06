@@ -6,9 +6,8 @@ import {
   emailSchema,
   passwordSchema,
   userUpdateSchema,
-  userUpdateType,
 } from "../zodSchema/user";
-import bcryptjs, { hash } from "bcryptjs";
+import bcryptjs from "bcryptjs";
 import { sendForgotPasswordMail } from "../utils/sendForgotPasswordMail";
 import { imageSchema } from "../zodSchema/blog";
 

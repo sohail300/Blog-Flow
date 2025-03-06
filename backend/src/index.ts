@@ -4,6 +4,7 @@ import blogRouter from "./routes/blog";
 import userRouter from "./routes/user";
 import { cors } from "hono/cors";
 import { auth } from "./middleware/authorisation";
+import seedDatabase from "../prisma/seed";
 
 const app = new Hono<{
   Bindings: {
@@ -31,6 +32,21 @@ app.get("/me", auth, (c: Context) => {
 app.route("/api/auth", authRouter);
 app.route("/api/blog", blogRouter);
 app.route("/api/user", userRouter);
+
+app.get("/seed", async (c) => {
+  try {
+    await seedDatabase(c);
+    return c.json({ message: "Database seeded successfully" });
+  } catch (error) {
+    return c.json(
+      {
+        error: "Seeding failed",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
+      500
+    );
+  }
+});
 
 app.notFound((c: Context) => {
   return c.text("Invalid Route", 404);

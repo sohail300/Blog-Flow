@@ -4,6 +4,9 @@
     "dev": "wrangler dev src/index.ts",
     "deploy": "wrangler deploy --minify src/index.ts"
   },
+  "prisma": {
+    "seed": "prisma/seed.ts"
+  },
   "dependencies": {
     "@google/generative-ai": "^0.19.0",
     "@prisma/client": "^5.16.2",

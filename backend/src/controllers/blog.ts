@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { Context } from "hono";
 import { StatusCode } from "../types/statusCode";
-import { blogSchema, imageSchema, publishSchema } from "../zodSchema/blog";
+import { blogSchema, publishSchema } from "../zodSchema/blog";
 import { generateDescription } from "../utils/generateDescription";
 import { sendNotificationMail } from "../utils/sendNotificationMail";
 
@@ -249,7 +249,7 @@ export async function postBlog(c: Context) {
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
 
-    const description = (await generateDescription(c, content)) || "";
+    const description = (await generateDescription(c, content)) ?? "";
 
     const blog = await prisma.blog.create({
       data: {
